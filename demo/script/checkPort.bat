@@ -1,0 +1,1 @@
+NETSTAT -ANO|FINDSTR /C:"0.0.0.0:%1 "

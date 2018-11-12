@@ -1,0 +1,2 @@
+::如果端口冲突或需要修改端口,可以将41180修改为你需要设置的端口号
+start "ServiceManageTools-0.0.1" java -jar demo-0.0.1-SNAPSHOT.war --server.port=41180

@@ -1,0 +1,24 @@
+说明：
+1.CtrlServicePivotal.json为服务启动关闭配置文件,配置格式是一个json数组,数组中一个元素就代表一个服务配置,文件编码使用UTF-8
+	公共属性配置说明：
+		checkServiceRateSeconds			检测服务频率 单位秒（默认90秒）
+		tryStartMaxTime					尝试启动最大次数 超过后不再进行尝试重启 默认为5 尝试启动5次 如果都启动失败 放弃启动
+		connectTimeOut					http检查服务活跃连接主机服务器的超时时间 默认15秒
+		readTimeOut						http检查服务读取远程返回的数据超时时间	默认60秒
+	1.1 服务启动关闭配置字段说明：
+		viewShowName	界面显示的名称.(例：mysql数据库、消息队列MQ、nginx服务)
+		servicePort		启动服务后会使用到的端口,格式为json数组(例: [3306,61616]),如果配置存在,服务进程启动后会检查端口是否开启,如果未配置不进行端口检查
+		pidToName		启动后的进程名称,(例：mysqld.exe、wrapper.exe)
+		startFile		启动服务的文件所在路径,如果文件与CtrlServicePivotal.json平级或下级目录可以使用${currentDir}/文件名 或 ${currentDir}/下级目录名.../文件名配置,也可以配置绝对路径 windows注意名称分隔符使用\\ linux使用/
+		startCommand	启动命令,如果startCommand和startFile都配置的情况下,使用startCommand启动服务.startFile失效.(例如:net start mysql)
+		stopFile		关闭服务的文件所在路径,如果文件与CtrlServicePivotal.json平级或下级目录可以使用${currentDir}/文件名 或 ${currentDir}/下级目录名.../文件名配置,也可以配置绝对路径 windows注意名称分隔符使用\\ linux使用/
+		stopCommand		关闭命令,如果stopCommand和stopFile都配置的情况下,使用stopCommand启动服务.stopFile失效.如果stopCommand和stopFile都未配置,直接通过pidToName找到PID进行结束进程操作(例:net stop mysql)
+		startTimeLength	启动时长设置,用于点击启动后,在设置的时长后用于端口检查是否开启 单位秒(s)
+		isWaitStartSucc 是否等待启动成功后再启动后面的服务,默认false,默认按顺序进行启动,未检查前者是否启动成功,设置为true时,后面的服务须等当前配置服务启动成功后才会启动,否则一直等待
+		httpCheckURL   	http get方式检查服务是否存在 配置url。例如：http://localhost:8081/query  [httpCheckURL配置时,httpResponse也必须同时配置,否则无效]
+		httpResponse    http响应结果 配置内容为字符串.例如："{\"code\":1000}"	[httpResponse配置时,httpCheckURL也必须同时配置,否则无效]
+		
+2.当前目录下start.bat为启动服务脚本,默认服务使用端口8081,如果冲突或需要修改,可以设置bat中端口为你需要的端口
+
+
+注:nginx启动需要修改script/start-nginx.bat中设置的所在盘符和所在文件夹
