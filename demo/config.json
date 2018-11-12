@@ -1,6 +1,6 @@
 {
 	"checkServiceRateSeconds":90,
-	"tryStartMaxTime":0,
+	"tryStartMaxTime":5,
 	"connectTimeOut":15,
 	"readTimeOut":60,
 	"services":[
