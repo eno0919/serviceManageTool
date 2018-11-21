@@ -1,0 +1,1 @@
+START "simbot1.exe" D:\ims\ims-platform\simulator\new_simbot_1\simbot1.exe

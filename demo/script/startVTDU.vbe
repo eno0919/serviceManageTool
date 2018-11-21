@@ -1,0 +1,2 @@
+set ws=wscript.createobject("wscript.shell")
+ws.run "D:\ims\ims-platform\ims-media\vtdu\VTDU.exe -d /start",0

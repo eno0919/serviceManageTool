@@ -1,2 +1,8 @@
+@ECHO OFF
+COLOR 0A
+CD /d %~dp0
+RD "%WinDir%\system32\rainss_perm" >NUL 2>NUL
+MD "%WinDir%\System32\rainss_perm" 2>NUL||(ECHO 请使用右键管理员身份运行！&&PAUSE >NUL&&EXIT)
+RD "%WinDir%\System32\rainss_perm" 2>NUL
 ::如果端口冲突或需要修改端口,可以将41180修改为你需要设置的端口号
-start "ServiceManageTools-0.0.1" java -jar demo-0.0.1-SNAPSHOT.war --server.port=41180
+start "ops-0.0.1#浏览器访问http://127.0.0.1:41180/" java -jar %cd%\ops.war --server.port=41180

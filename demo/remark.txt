@@ -18,7 +18,23 @@
 		httpCheckURL   	http get方式检查服务是否存在 配置url。例如：http://localhost:8081/query  [httpCheckURL配置时,httpResponse也必须同时配置,否则无效]
 		httpResponse    http响应结果 配置内容为字符串.例如："{\"code\":1000}"	[httpResponse配置时,httpCheckURL也必须同时配置,否则无效]
 		
-2.当前目录下start.bat为启动服务脚本,默认服务使用端口8081,如果冲突或需要修改,可以设置bat中端口为你需要的端口
+2.当前目录下start.bat为启动服务脚本,默认服务使用端口41180,如果冲突或需要修改,可以设置bat中端口为你需要的端口
 
+3.如果部分服务之前是使用的java -jar在命令行中启动运行方式,
+	请在/script目录下以jarRunTemplates.bat拷贝一个副本(修改文件名为你的服务名字,使用英文),编辑里面内容,配置config.json配置文件时,所属服务的startFile设置为你修改编辑的文件全路径+文件名.bat
+	例如：
+	{
+		"viewShowName":"web-station-0.0.1-SNAPSHOT",
+		"servicePort":[8081],
+		"pidToName":"jps@web-station-0.0.1-SNAPSHOT.jar",
+		"startFile":"${currentDir}\\script\\start-web-station.bat",
+		"startCommand":"",
+		"stopFile":"",
+		"stopCommand":"",
+		"startTimeLength":10,
+		"isWaitStartSucc":false,
+		"httpCheckURL":"http://127.0.0.1:8081/ops/run",
+		"httpResponse":"{\"code\":1000}"
+	}
+	pidToName需以jps@作为前缀
 
-注:nginx启动需要修改script/start-nginx.bat中设置的所在盘符和所在文件夹

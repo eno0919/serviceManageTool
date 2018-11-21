@@ -1,0 +1,1 @@
+如果需要jar启动方式为静默，可参考runCoreServices.bat和runCoreServices.vbe

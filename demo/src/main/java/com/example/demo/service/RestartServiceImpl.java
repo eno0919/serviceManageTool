@@ -298,14 +298,8 @@ public class RestartServiceImpl {
 	 * @param services
 	 */
 	public void restartService(String[] services) {
-		for(int i = 0; i < services.length; i++) {
-			if(ConfigManage.getServiceMap().get(services[i]) != null) {
-				serviceOpt.put(services[i], 1);
-				closeService(services[i]);
-				openService(services[i]);
-				serviceOpt.put(services[i], 0);
-			}
-		}
+		closeService(services);
+		openService(services);
 	}
 	
 	/***
