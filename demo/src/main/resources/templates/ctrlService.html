@@ -77,25 +77,19 @@
 <script type="text/javascript">
 
 	function isIE(){
-		if(!!window.ActiveXObject || "ActiveXObject" in window){
-			return true;
-		}
-		return false;
+		return (!!window.ActiveXObject || "ActiveXObject" in window);
 	}
 
 	function isIE11(){
-		if((/Trident\/7\./).test(navigator.userAgent)) return true;
-		return false;
+		return ((/Trident\/7\./).test(navigator.userAgent));
 	}
-	
- 	var greenStateHTML = "<span style=\"color:green\">运行</span>";
 	
 	function tbodyServerState(serverState){
 		switch(serverState){
 		case 0:
 			return "<span>未启动</span>";
 		case 1:
-			return greenStateHTML;
+			return "<span style=\"color:green\">运行</span>";
 		case 2:
 			return "<span>执行操作中...</span>";
 		case 3:
@@ -162,6 +156,7 @@
 	}
 	
 	function startService(){
+		clearTimeout(timerTask);
 		execCommand("启动服务");
 		setInterval(execCommand, 500, "启动服务");
 		var services = getCheckedValues();
@@ -187,6 +182,7 @@
 	}
 	
 	function closeService(){
+		clearTimeout(timerTask);
 		execCommand("关闭服务");
 		setInterval(execCommand, 500, "关闭服务");
 		var services = getCheckedValues();
@@ -212,6 +208,7 @@
 	}
 	
 	function restartService(){
+		clearTimeout(timerTask);
 		execCommand("重启服务");
 		setInterval(execCommand, 500, "重启服务");
 		var services = getCheckedValues();
@@ -306,8 +303,11 @@
 		var tbodyData = getTbodyData();
 		setTbodyData(tbodyData);
 	}
- 	initTbody();
 	
-	setTimeout(reload, 60000)
+ 	initTbody();
+ 	
+	var timerTask = setTimeout(reload, 60000)
+	
+	
 </script>
 </html>

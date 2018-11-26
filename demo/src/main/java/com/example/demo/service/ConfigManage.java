@@ -84,6 +84,7 @@ public class ConfigManage {
 	 * @param services
 	 */
 	private void setServiceConfig(JSONArray services) {
+		serviceImageNameList.clear();
 		for(int i = 0; i < services.size(); i++) {
 			JSONObject jsonObj = (JSONObject) services.get(i);
 			String pidToName = jsonObj.getString("pidToName");

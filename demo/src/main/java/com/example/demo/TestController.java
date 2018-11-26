@@ -62,15 +62,15 @@ public class TestController {
 		return null;
 	}
 	
-	@RequestMapping("/reload")
-	@ResponseBody
-	public Object reload() {
-		//加载配置文件
-		ConfigManage.getInstance().loadConfig();
-		//启动定时服务检测
-		RestartTimer.run();
-		return true;
-	}
+//	@RequestMapping("/reload")
+//	@ResponseBody
+//	public Object reload() {
+//		//加载配置文件
+//		ConfigManage.getInstance().loadConfig();
+//		//启动定时服务检测
+//		RestartTimer.run();
+//		return true;
+//	}
 	
 }
 
