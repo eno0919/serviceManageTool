@@ -149,9 +149,12 @@ public class RestartServiceImpl {
 		try {
 			RestartLogServiceImpl.getInstance().OptionRecordAdd(serviceOpt.get(pidToName), "开启" + pidToName + "服务");
 			Runtime.getRuntime().exec(startCommand);
+			RestartLogServiceImpl.writeInfoLog("执行了开启服务:" + startCommand);
 			Integer startTimeLength = serviceProperty.getInteger("startTimeLength");
 			Thread.sleep(startTimeLength==null ? 1000 : startTimeLength*1000);
+			RestartLogServiceImpl.writeInfoLog("开始检查" + pidToName + "服务启动后端口开放情况.");
 			Integer[] sportAry = checkPort(pidToName);
+			if(sportAry != null) RestartLogServiceImpl.writeInfoLog("端口还未开放数量为:" + sportAry.length);
 			if(sportAry != null && sportAry.length > 0) {
 				state = 2;//启动中
 			}else {
@@ -162,7 +165,9 @@ public class RestartServiceImpl {
 				String httpCheckURL = serviceProperty.getString("httpCheckURL");
 				String httpResponse = serviceProperty.getString("httpResponse");
 				if(httpCheckURL != null && httpResponse != null && !httpCheckURL.isEmpty() && !httpResponse.isEmpty()) {
+					RestartLogServiceImpl.writeInfoLog("进行http请求方式查看" + pidToName + "活跃状态:" + httpCheckURL);
 					String result = HttpClientService.doGet(httpCheckURL);
+					RestartLogServiceImpl.writeInfoLog(httpCheckURL + "响应结果为:" + result);
 					if(httpResponse.equals(result)) {
 						state = 1;
 					}else {
@@ -171,15 +176,33 @@ public class RestartServiceImpl {
 					}
 				}
 			}
-			if(state == 2)
+			if(state == 2) {				
+				RestartLogServiceImpl.writeInfoLog("服务" + pidToName + "正在启动当中.");
 				RestartLogServiceImpl.getInstance().OptionRecordAdd(serviceOpt.get(pidToName), pidToName + "服务正在启动当中");
-			else if(state == 1)
+			}
+			else if(state == 1) {
+				RestartLogServiceImpl.writeInfoLog("服务" + pidToName + "启动成功.");
 				RestartLogServiceImpl.getInstance().OptionRecordAdd(serviceOpt.get(pidToName), pidToName + "服务启动成功");
+			}
 		} catch (Exception e) {
 			RestartLogServiceImpl.writeInfoLog("启动服务" + pidToName + "发生异常.");
 			e.printStackTrace();
 			state = 0;//启动失败
 			RestartLogServiceImpl.getInstance().OptionRecordAdd(serviceOpt.get(pidToName), pidToName + "服务启动失败");
+		}
+		Boolean isWaitStartSucc = serviceProperty.getBoolean("isWaitStartSucc");
+		isWaitStartSucc = (isWaitStartSucc == null) ? false : isWaitStartSucc;
+		if(isWaitStartSucc && state == 2) {
+			RestartLogServiceImpl.writeInfoLog("进入等待服务" + pidToName + "启动成功后继续后面执行");
+			while(queryServiceState(pidToName) != 1) {
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			state = 1;
+			RestartLogServiceImpl.writeInfoLog("服务" + pidToName + "启动成功.");
 		}
 		RestartTimer.addTimer(pidToName);
 		return state;

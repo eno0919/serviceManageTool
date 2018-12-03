@@ -50,16 +50,19 @@ public class RestartTimer {
 			@Override
 			public void run() {
 				try {
-					if(RestartServiceImpl.getInstace().queryPid(serviceName) != null) {
+					if(RestartServiceImpl.getInstace().queryServiceState(serviceName) == 1) {
+						// queryServiceState(services[i]) != 1 RestartServiceImpl.getInstace().queryPid(serviceName) != null
 						//说明服务进程存在
 						tryStartTimeLog.put(serviceName, 0);
 					}else {
 						Integer num = tryStartTimeLog.get(serviceName);
 						if(num == null) num = 0;
-						if(num != 0 && num == ConfigManage.getTryStartMaxTime()) {
+						if(num != 0 && num >= ConfigManage.getTryStartMaxTime()) {
 							//说明已经尝试过最大次数了 放弃自动尝试启动方式
+							timerMap.get(serviceName).cancel();
 							return ;
 						}else {						
+							RestartServiceImpl.getInstace().closeService(serviceName);
 							RestartServiceImpl.getInstace().openService(serviceName);
 							tryStartTimeLog.put(serviceName, ++num);
 						}

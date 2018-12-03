@@ -61,9 +61,11 @@ public class HttpClientService {
                 result = sbf.toString();
             }
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+        	RestartLogServiceImpl.writeInfoLog("错误的 URL或者找不到任何合法协议或者无法解析字符串");
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+        	RestartLogServiceImpl.writeInfoLog("遭到拒绝远程连接,没有任何进程在远程地址/端口上进行侦听");
         } finally {
             // 关闭资源
             if (null != br) {
